@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Green</title>
+        <style>
+            body {
+                background-color: black;
+            }
+            body.green {
+                background-color: limegreen;
+            }
+        </style>
+        <script defer>
+            const ws = new WebSocket(`ws://${window.location.host}`);
+            ws.addEventListener("message", event => {
+                if (event.data === "green") {
+                    console.log("green");
+                    document.body.classList.add("green");
+                    setTimeout(() => {
+                        console.log("black");
+                        document.body.classList.remove("green");
+                    }, 5000);
+                }
+            });
+        </script>
+    </head>
+    <body></body>
+</html>
