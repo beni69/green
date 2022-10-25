@@ -1,5 +1,5 @@
 import express from "express";
-import { Server } from "ws";
+import WebSocket, { Server } from "ws";
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,12 +18,26 @@ server.on("upgrade", (req, socket, head) => {
         wsServer.emit("connection", ws, req);
     });
 });
+wsServer.on("connection", () => void console.log("new connection"));
+wsServer.on("close", () => void console.log("connection closed"));
 
+let i: number;
+let s: WebSocket.WebSocket;
 setInterval(() => {
-    if (!wsServer.clients.size) return;
+    if (!wsServer.clients.size) return void console.debug("skipped");
 
-    console.log("sending da green");
-    Array.from(wsServer.clients)[
-        Math.floor(Math.random() * wsServer.clients.size)
-    ].send("green");
-}, 5000);
+    // remove previous
+    if (s !== undefined) {
+        if (s.readyState === s.CLOSED)
+            console.debug(`black: ${i} disconnected`);
+        else {
+            console.log("sending black: " + i);
+            s.send("black");
+        }
+    }
+
+    i = Math.floor(Math.random() * wsServer.clients.size);
+    console.log("sending da green: " + i);
+    s = Array.from(wsServer.clients)[i];
+    s.send("green");
+}, 10000);

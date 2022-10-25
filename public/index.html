@@ -19,10 +19,9 @@
                 if (event.data === "green") {
                     console.log("green");
                     document.body.classList.add("green");
-                    setTimeout(() => {
-                        console.log("black");
-                        document.body.classList.remove("green");
-                    }, 5000);
+                } else if (event.data === "black") {
+                    console.log("black");
+                    document.body.classList.remove("green");
                 }
             });
         </script>
